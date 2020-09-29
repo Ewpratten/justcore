@@ -1,14 +1,10 @@
 package ca.retrylife.mc.justcore.render.capes;
 
-import java.util.List;
-
 import ca.retrylife.mc.justcore.model.CustomAbstractClientPlayerEntity;
 import ca.retrylife.mc.justcore.model.JustPlayer;
-import ca.retrylife.mc.justcore.render.PlayerEntityFeatureRenderStep;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.feature.CapeFeatureRenderer;
-import net.minecraft.client.render.entity.feature.FeatureRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRendererContext;
 import net.minecraft.client.render.entity.model.PlayerEntityModel;
 import net.minecraft.client.util.math.MatrixStack;
