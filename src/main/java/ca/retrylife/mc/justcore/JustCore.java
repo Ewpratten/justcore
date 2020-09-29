@@ -36,7 +36,7 @@ public class JustCore implements ModInitializer {
 	/**
 	 * Registers custom capes for all mod developers
 	 */
-	private void registerModDeveloperCapes() throws IOException {
+	private void registerModDeveloperCapes() throws Throwable {
 		// Define the mod developer cape
 		Cape devCape = new Cape(new URL("https://raw.githubusercontent.com/Ewpratten/justcore/master/assets/contributor-cape.png"));
 
