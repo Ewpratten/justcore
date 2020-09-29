@@ -13,9 +13,21 @@ import ca.retrylife.mc.justcore.model.JustPlayer;
  */
 public class CustomPlayerCapeRegistry {
     private Logger logger = LogManager.getLogger(getClass());
+    private static CustomPlayerCapeRegistry instance;
 
     // Registry map
     private HashMap<JustPlayer, CapeContainer> capeRegistry = new HashMap<>();
+
+    private CustomPlayerCapeRegistry() {
+
+    }
+
+    public static CustomPlayerCapeRegistry getInstance() {
+        if (instance == null) {
+            instance = new CustomPlayerCapeRegistry();
+        }
+        return instance;
+    }
 
     /**
      * Overwrite a player's cape with a custom one
