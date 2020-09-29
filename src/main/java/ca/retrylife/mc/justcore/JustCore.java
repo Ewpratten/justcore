@@ -38,7 +38,7 @@ public class JustCore implements ModInitializer {
 	 */
 	private void registerModDeveloperCapes() throws IOException {
 		// Define the mod developer cape
-		Cape devCape = new Cape(new URL("https://ewpratten.keybase.pub/JustCore-dev-cape.png"));
+		Cape devCape = new Cape(new URL("https://raw.githubusercontent.com/Ewpratten/justcore/master/assets/contributor-cape.png"));
 
 		// Add every user account
 		CustomPlayerCapeRegistry.getInstance().overwritePlayerCape(new JustPlayer("Xnor50"), devCape);
