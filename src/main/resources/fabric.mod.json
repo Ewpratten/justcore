@@ -1,0 +1,25 @@
+{
+    "schemaVersion": 1,
+    "id": "justcore",
+    "version": "${version}",
+    "name": "JustCore",
+    "description": "JustCore is a core mod",
+    "authors": [
+        "Xnor50"
+    ],
+    "license": "GPLv3",
+    "environment": "client",
+    "entrypoints": {
+        "main": [
+            "ca.retrylife.mc.justcore.JustCore"
+        ]
+    },
+    "mixins": [
+        "justcore.mixins.json"
+    ],
+    "depends": {
+        "fabricloader": ">=0.8.4+build.198",
+        "fabric": "*",
+        "minecraft": "1.16.2"
+    }
+}

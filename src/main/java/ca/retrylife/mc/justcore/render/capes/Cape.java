@@ -17,6 +17,9 @@ import net.minecraft.util.Identifier;
  */
 public class Cape {
 
+    // Texture
+    private NativeImage textureImage;
+    private String textureName;
     private Identifier texture;
 
     /**
@@ -33,8 +36,8 @@ public class Cape {
         NativeImage croppedTexture = CapeUtils.cleanCapeTexture(nativeRemoteImage);
 
         // Register a new texture with the Minecraft client
-        this.texture = DynamicTextureUtils
-                .registerTextureFromImage("CAPE_" + Integer.toString(nativeRemoteImage.hashCode()), croppedTexture);
+        this.textureName = "CAPE_" + Integer.toString(nativeRemoteImage.hashCode());
+        this.textureImage = croppedTexture;
     }
 
     /**
@@ -48,7 +51,8 @@ public class Cape {
         NativeImage croppedTexture = CapeUtils.cleanCapeTexture(image);
 
         // Register a new texture with the Minecraft client
-        this.texture = DynamicTextureUtils.registerTextureFromImage(name, croppedTexture);
+        this.textureName = name;
+        this.textureImage = croppedTexture;
     }
 
     /**
@@ -57,6 +61,11 @@ public class Cape {
      * @return Texture
      */
     public Identifier getTexture() {
+
+        // If this is the first load, register the texture
+        if (this.texture == null) {
+            this.texture = DynamicTextureUtils.registerTextureFromImage(textureName, textureImage);
+        }
         return this.texture;
     }
 

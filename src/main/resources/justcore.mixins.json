@@ -1,0 +1,11 @@
+{
+    "required": true,
+    "package": "ca.retrylife.mc.justcore.mixins",
+    "compatibilityLevel": "JAVA_8",
+    "mixins": [
+        "PlayerEntityRendererMixin"
+    ],
+    "injectors": {
+        "defaultRequire": 1
+    }
+}
