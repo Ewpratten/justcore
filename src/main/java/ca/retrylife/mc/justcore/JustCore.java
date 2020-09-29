@@ -25,6 +25,9 @@ public class JustCore implements ModInitializer {
 		} catch (IOException e) {
 			logger.log(Level.WARN,
 					"Failed to award mod developers with their capes. Maybe the resource is not available?");
+		} catch (Throwable e) {
+			logger.log(Level.WARN, "An unknown failure occurred while trying to award developers with capes");
+			e.printStackTrace();
 		}
 
 		logger.log(Level.INFO, "JustCore Ready");

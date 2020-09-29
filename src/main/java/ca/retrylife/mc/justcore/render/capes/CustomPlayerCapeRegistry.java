@@ -16,7 +16,7 @@ public class CustomPlayerCapeRegistry {
     private static CustomPlayerCapeRegistry instance;
 
     // Registry map
-    private HashMap<JustPlayer, CapeContainer> capeRegistry = new HashMap<>();
+    private HashMap<String, CapeContainer> capeRegistry = new HashMap<>();
 
     private CustomPlayerCapeRegistry() {
 
@@ -39,9 +39,10 @@ public class CustomPlayerCapeRegistry {
         // Construct a container for the cape
         CapeContainer container = new CapeContainer();
         container.cape = newCape;
+        container.visible = true;
 
         // Add the cape for the player
-        capeRegistry.put(player, container);
+        capeRegistry.put(player.getNameOrId(), container);
         logger.log(Level.INFO, String.format("Player %s has been given a custom cape", player.getNameOrId()));
     }
 
@@ -54,7 +55,7 @@ public class CustomPlayerCapeRegistry {
      */
     public void setPlayerCapeVisibility(JustPlayer player, boolean visible) {
         // Ensure the player is in the registry
-        if (!capeRegistry.containsKey(player)) {
+        if (!capeRegistry.containsKey(player.getNameOrId())) {
             logger.log(Level.WARN,
                     String.format(
                             "Player %s is not in the cape registry, but a call was made to set their cape visibility",
@@ -63,7 +64,7 @@ public class CustomPlayerCapeRegistry {
         }
 
         // Set the visibility
-        capeRegistry.get(player).visible = visible;
+        capeRegistry.get(player.getNameOrId()).visible = visible;
         logger.log(Level.INFO,
                 String.format("Player %s had their cape visibility set to %b", player.getNameOrId(), visible));
     }
@@ -75,7 +76,7 @@ public class CustomPlayerCapeRegistry {
      * @return Has custom cape?
      */
     public boolean checkPlayerHasCustomCape(JustPlayer player) {
-        return capeRegistry.containsKey(player);
+        return capeRegistry.containsKey(player.getNameOrId());
     }
 
     /**
@@ -85,7 +86,7 @@ public class CustomPlayerCapeRegistry {
      * @return Custom cape
      */
     public Cape getCapeForPlayer(JustPlayer player) {
-        return capeRegistry.get(player).cape;
+        return capeRegistry.get(player.getNameOrId()).cape;
     }
 
     /**
@@ -95,7 +96,7 @@ public class CustomPlayerCapeRegistry {
      * @return Should show cape?
      */
     public boolean checkCustomCapeVisibleForPlayer(JustPlayer player) {
-        return capeRegistry.get(player).visible;
+        return capeRegistry.get(player.getNameOrId()).visible;
     }
 
 }

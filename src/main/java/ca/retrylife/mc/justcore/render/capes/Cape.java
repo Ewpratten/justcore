@@ -4,6 +4,10 @@ import java.net.URL;
 
 import javax.imageio.ImageIO;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -17,6 +21,8 @@ import net.minecraft.util.Identifier;
  */
 public class Cape {
 
+	private Logger logger = LogManager.getLogger(getClass());
+
     // Texture
     private NativeImage textureImage;
     private String textureName;
@@ -29,7 +35,9 @@ public class Cape {
      * @throws IOException Texture resource URL
      */
     public Cape(URL remoteTexture) throws IOException {
+
         // Load the image from its remote stream
+        logger.log(Level.INFO, "Fetching remote cape from: " + remoteTexture.toString());
         NativeImage nativeRemoteImage = NativeImage.read(remoteTexture.openStream());
 
         // Get a cropped texture for the cape
@@ -64,6 +72,7 @@ public class Cape {
 
         // If this is the first load, register the texture
         if (this.texture == null) {
+            logger.log(Level.INFO, "Performing runtime-load of cape: " + textureName);
             this.texture = DynamicTextureUtils.registerTextureFromImage(textureName, textureImage);
         }
         return this.texture;
