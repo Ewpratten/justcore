@@ -3,6 +3,7 @@ package ca.retrylife.mc.justcore.commands;
 import java.util.ArrayList;
 import java.util.function.Supplier;
 
+import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 
 import org.apache.logging.log4j.Level;
@@ -24,7 +25,7 @@ public class CommandRegistry {
     private Logger logger = LogManager.getLogger(getClass());
 
     // List of commands
-    private ArrayList<Supplier<LiteralArgumentBuilder<ServerCommandSource>>> registeredCommands = new ArrayList<>();
+    private ArrayList<Supplier<ArgumentBuilder>> registeredCommands = new ArrayList<>();
 
     // Base command for any core commands
     public static final String JUST_CORE_BASE_COMMAND_PREFIX = "jc";
@@ -46,7 +47,7 @@ public class CommandRegistry {
      * @param commandConstructor Command supplier
      */
     public void addCommand(String description,
-            Supplier<LiteralArgumentBuilder<ServerCommandSource>> commandConstructor) {
+            Supplier<ArgumentBuilder> commandConstructor) {
         logger.log(Level.INFO, String.format("Registered a new command: %s", description));
         registeredCommands.add(commandConstructor);
     }
@@ -58,10 +59,10 @@ public class CommandRegistry {
         CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> {
             
             // Set up every command in the list
-            for (Supplier<LiteralArgumentBuilder<ServerCommandSource>> constructor : registeredCommands) {
+            for (Supplier<ArgumentBuilder> constructor : registeredCommands) {
                 
                 // Register the command
-                dispatcher.register(constructor.get());
+                dispatcher.register((LiteralArgumentBuilder<ServerCommandSource>)constructor.get());
 
             }
         });
