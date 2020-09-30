@@ -1,0 +1,13 @@
+ca.retrylife.mc.actionbridge
+ca.retrylife.mc.actionbridge.lexer.tokens
+ca.retrylife.mc.justcore
+ca.retrylife.mc.justcore.commandconfiguration
+ca.retrylife.mc.justcore.commands
+ca.retrylife.mc.justcore.mixins
+ca.retrylife.mc.justcore.model
+ca.retrylife.mc.justcore.render
+ca.retrylife.mc.justcore.render.capes
+ca.retrylife.mc.justcore.render.cosmetics
+ca.retrylife.mc.justcore.render.cosmetics.templates
+ca.retrylife.mc.justcore.utils
+ca.retrylife.mc.justcore.utils.texture
