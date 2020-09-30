@@ -9,6 +9,8 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import ca.retrylife.mc.justcore.commandconfiguration.CosmeticEffectDebugCommands;
+import ca.retrylife.mc.justcore.commandconfiguration.DeveloperCapeDebugCommands;
 import ca.retrylife.mc.justcore.commands.ClientSideCommandRegistry;
 import ca.retrylife.mc.justcore.commands.CommandRegistry;
 import ca.retrylife.mc.justcore.model.JustPlayer;
@@ -39,6 +41,9 @@ public class JustCore implements ModInitializer {
 			e.printStackTrace();
 		}
 
+		// Add every command set
+		new CosmeticEffectDebugCommands();
+
 		// Register all server commands
 		CommandRegistry.getInstance().enableAllCommands();
 
@@ -55,71 +60,9 @@ public class JustCore implements ModInitializer {
 
 		// Add every user account
 		CustomPlayerCapeRegistry.getInstance().overwritePlayerCape(new JustPlayer("Xnor50"), devCape);
-		CustomPlayerCapeRegistry.getInstance().overwritePlayerCape(new JustPlayer("redstoneninja"), devCape);
 
-		// Set up a server command for temporarily awarding players a developer cape for
-		// testing
-		ClientSideCommandRegistry.getInstance().addCommand("TempAwardDevCapeCommand", () -> {
-			return ArgumentBuilders.literal(CommandRegistry.JUST_CORE_BASE_COMMAND_PREFIX)
-					.then(ArgumentBuilders.literal("awardTempDevCape")
-							.then(ArgumentBuilders.argument("player", EntityArgumentType.player()).executes(ctx -> {
-
-								// Parse out the player name
-								String[] commandSplit = ctx.getLastChild().getInput().split(" ");
-								String playerName = commandSplit[commandSplit.length - 1];
-
-								// Make a call to the cape registry
-								CustomPlayerCapeRegistry.getInstance().overwritePlayerCape(new JustPlayer(playerName),
-										devCape);
-
-								// Notify the user
-								ChatUtils.sendSelfChatMessage(
-										String.format("Temporarily awarded a developer cape to user: %s", playerName));
-								return 0;
-							})));
-		});
-
-		// Set up a command for showing a player's dev cape
-		ClientSideCommandRegistry.getInstance().addCommand("TempShowDevCapeCommand", () -> {
-			return ArgumentBuilders.literal(CommandRegistry.JUST_CORE_BASE_COMMAND_PREFIX)
-					.then(ArgumentBuilders.literal("showDevCape")
-							.then(ArgumentBuilders.argument("player", EntityArgumentType.player()).executes(ctx -> {
-
-								// Parse out the player name
-								String[] commandSplit = ctx.getLastChild().getInput().split(" ");
-								String playerName = commandSplit[commandSplit.length - 1];
-
-								// Make a call to the cape registry
-								CustomPlayerCapeRegistry.getInstance()
-										.setPlayerCapeVisibility(new JustPlayer(playerName), true);
-
-								// Notify the user
-								ChatUtils.sendSelfChatMessage(
-										String.format("Showing custom cape to user: %s", playerName));
-								return 0;
-							})));
-		});
-
-		// Set up a command for hiding a player's dev cape
-		ClientSideCommandRegistry.getInstance().addCommand("TempHideDevCapeCommand", () -> {
-			return ArgumentBuilders.literal(CommandRegistry.JUST_CORE_BASE_COMMAND_PREFIX)
-					.then(ArgumentBuilders.literal("hideDevCape")
-							.then(ArgumentBuilders.argument("player", EntityArgumentType.player()).executes(ctx -> {
-
-								// Parse out the player name
-								String[] commandSplit = ctx.getLastChild().getInput().split(" ");
-								String playerName = commandSplit[commandSplit.length - 1];
-
-								// Make a call to the cape registry
-								CustomPlayerCapeRegistry.getInstance()
-										.setPlayerCapeVisibility(new JustPlayer(playerName), false);
-
-								// Notify the user
-								ChatUtils.sendSelfChatMessage(
-										String.format("Hiding custom cape to user: %s", playerName));
-								return 0;
-							})));
-		});
+		// Set up dev commands for dealing with custom cape debugging
+		new DeveloperCapeDebugCommands(devCape);
 	}
 
 }

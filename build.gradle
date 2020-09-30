@@ -54,12 +54,21 @@ tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
 }
 
+task javadoc2(type: Javadoc){
+    source = sourceSets.main.allJava
+    classpath = sourceSets.main.runtimeClasspath 
+    options.addBooleanOption('-no-module-directories', true)
+    options.links 'http://docs.spring.io/spring/docs/4.3.x/javadoc-api/', 'http://docs.oracle.com/javase/8/docs/api/', 'http://docs.spring.io/spring-ws/docs/2.3.0.RELEASE/api/', 'http://docs.spring.io/spring-security/site/docs/4.0.4.RELEASE/apidocs/', 'https://legacy-fabric.github.io/yarn/', 'https://repo.karuslabs.com/repository/brigadier/'
+}
+
 // Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
 // if it is present.
 // If you remove this task, sources will not be generated.
 task sourcesJar(type: Jar, dependsOn: classes) {
     classifier = "sources"
+    dependsOn javadoc2
     from sourceSets.main.allSource
+    from javadoc2.destinationDir
 }
 
 jar {
