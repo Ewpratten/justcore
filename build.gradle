@@ -10,6 +10,8 @@ archivesBaseName = project.archives_base_name
 version = project.mod_version
 group = project.maven_group
 
+apply from: "./simpleunittest.gradle"
+
 minecraft {
 }
 
@@ -32,6 +34,10 @@ dependencies {
     modCompile "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
     modImplementation "io.github.cottonmc:cotton-client-commands:1.0.1+1.16-rc1"
+
+    // Use JUnit test framework
+    testImplementation 'junit:junit:4.13'
+
 }
 
 processResources {
