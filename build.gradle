@@ -81,6 +81,12 @@ jar {
     from "LICENSE"
 }
 
+task copyJar(type: Copy){
+    dependsOn jar
+    from file("$buildDir/libs/justcore-" + project.version + ".jar")
+    into file("$buildDir/libs/justcore-release.jar")
+}
+
 // configure the maven publication
 publishing {
     publications {
