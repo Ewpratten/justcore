@@ -19,7 +19,6 @@ public class ThePlayer {
 
         // Get access to the client
         this.mc = MinecraftClient.getInstance();
-        mc.player.
 
     }
 
