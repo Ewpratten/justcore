@@ -19,50 +19,42 @@ public class CosmeticEffectDebugCommands {
 
 		// Add a command for enabling a cosmetic effect for a player
 		ClientSideCommandRegistry.getInstance().addCommand("AddPlayerCosmetics", () -> {
-			return ActionBridge.newClientSideCommand(this::addPlayerCosmetics,
-					new StringLiteral(CommandRegistry.JUST_CORE_BASE_COMMAND_PREFIX), new StringLiteral("addEffect"),
+			return ActionBridge.newClientSideCommand((c) -> {
+				return changePlayerCosmetics(c, true);
+			}, new StringLiteral(CommandRegistry.JUST_CORE_BASE_COMMAND_PREFIX), new StringLiteral("addEffect"),
 					new SinglePlayerSelector("player"), new StringInput("effect"));
 		});
 
 		// Add a command for disabling a cosmetic effect for a player
 		ClientSideCommandRegistry.getInstance().addCommand("RemovePlayerCosmetics", () -> {
-			return ActionBridge.newClientSideCommand(this::removePlayerCosmetics,
-					new StringLiteral(CommandRegistry.JUST_CORE_BASE_COMMAND_PREFIX), new StringLiteral("removeEffect"),
+			return ActionBridge.newClientSideCommand((c) -> {
+				return changePlayerCosmetics(c, false);
+			}, new StringLiteral(CommandRegistry.JUST_CORE_BASE_COMMAND_PREFIX), new StringLiteral("removeEffect"),
 					new SinglePlayerSelector("player"), new StringInput("effect"));
 		});
 	}
 
-	private int addPlayerCosmetics(CommandContext<?> ctx) {
+	private int changePlayerCosmetics(CommandContext<?> ctx, boolean show) {
 		// Parse out the player name and effect
 		String[] commandSplit = ctx.getLastChild().getInput().split(" ");
 		String playerName = commandSplit[commandSplit.length - 2];
 		String effectName = commandSplit[commandSplit.length - 1];
 
-		// Get the effect to apply
+		// Get the effect to handle
 		CosmeticEffect newEffect = CosmeticEffect.stringNameToEffectObject(effectName);
 
 		// Make registry call
-		CustomPlayerCosmeticsRegistry.getInstance().addCosmeticEffectToPlayer(new JustPlayer(playerName), newEffect);
+		if (show) {
+			CustomPlayerCosmeticsRegistry.getInstance().addCosmeticEffectToPlayer(new JustPlayer(playerName),
+					newEffect);
+		} else {
+			CustomPlayerCosmeticsRegistry.getInstance().removeCosmeticEffectToPlayer(new JustPlayer(playerName),
+					newEffect);
+		}
 
 		// Notify the user
-		ChatUtils.sendSelfChatMessage(String.format("Applying effect %s to user: %s", effectName, playerName));
-		return 0;
-	}
-
-	private int removePlayerCosmetics(CommandContext<?> ctx) {
-		// Parse out the player name and effect
-		String[] commandSplit = ctx.getLastChild().getInput().split(" ");
-		String playerName = commandSplit[commandSplit.length - 2];
-		String effectName = commandSplit[commandSplit.length - 1];
-
-		// Get the effect to remove
-		CosmeticEffect newEffect = CosmeticEffect.stringNameToEffectObject(effectName);
-
-		// Make registry call
-		CustomPlayerCosmeticsRegistry.getInstance().removeCosmeticEffectToPlayer(new JustPlayer(playerName), newEffect);
-
-		// Notify the user
-		ChatUtils.sendSelfChatMessage(String.format("Removing effect %s from user: %s", effectName, playerName));
+		ChatUtils.sendSelfChatMessage(
+				String.format("%s effect %s for user: %s", (show) ? "Applying" : "Removing", effectName, playerName));
 		return 0;
 	}
 
