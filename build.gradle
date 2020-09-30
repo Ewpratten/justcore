@@ -84,7 +84,8 @@ jar {
 task copyJar(type: Copy){
     dependsOn jar
     from file("$buildDir/libs/justcore-" + project.version + ".jar")
-    into file("$buildDir/libs/justcore-release.jar")
+    into file("$buildDir/libs/")
+    rename "justcore-" + project.version + ".jar", "justcore-release.jar"
 }
 
 // configure the maven publication
