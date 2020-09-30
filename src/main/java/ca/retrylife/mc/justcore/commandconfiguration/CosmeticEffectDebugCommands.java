@@ -1,71 +1,61 @@
 package ca.retrylife.mc.justcore.commandconfiguration;
 
-import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.context.CommandContext;
 
+import ca.retrylife.mc.actionbridge.ActionBridge;
+import ca.retrylife.mc.actionbridge.lexer.tokens.SinglePlayerSelector;
+import ca.retrylife.mc.actionbridge.lexer.tokens.StringInput;
+import ca.retrylife.mc.actionbridge.lexer.tokens.StringLiteral;
 import ca.retrylife.mc.justcore.commands.ClientSideCommandRegistry;
 import ca.retrylife.mc.justcore.commands.CommandRegistry;
 import ca.retrylife.mc.justcore.model.JustPlayer;
 import ca.retrylife.mc.justcore.render.cosmetics.CosmeticEffect;
 import ca.retrylife.mc.justcore.render.cosmetics.CustomPlayerCosmeticsRegistry;
 import ca.retrylife.mc.justcore.utils.ChatUtils;
-import io.github.cottonmc.clientcommands.ArgumentBuilders;
-import net.minecraft.command.argument.EntityArgumentType;
 
 public class CosmeticEffectDebugCommands {
 
-    public CosmeticEffectDebugCommands() {
+	public CosmeticEffectDebugCommands() {
 
-        // Add a command for enabling a cosmetic effect for a player
-        ClientSideCommandRegistry.getInstance().addCommand("AddPlayerCosmetics", () -> {
-            return ArgumentBuilders.literal(CommandRegistry.JUST_CORE_BASE_COMMAND_PREFIX)
-                    .then(ArgumentBuilders.literal("addEffect")
-                            .then(ArgumentBuilders.argument("player", EntityArgumentType.player()).then(
-                                    ArgumentBuilders.argument("effect", StringArgumentType.string()).executes(ctx -> {
+		// Add a command for enabling a cosmetic effect for a player
+		ClientSideCommandRegistry.getInstance().addCommand("AddPlayerCosmetics", () -> {
+			return ActionBridge.newClientSideCommand((c) -> {
+				return changePlayerCosmetics(c, true);
+			}, new StringLiteral(CommandRegistry.JUST_CORE_BASE_COMMAND_PREFIX), new StringLiteral("addEffect"),
+					new SinglePlayerSelector("player"), new StringInput("effect"));
+		});
 
-                                        // Parse out the player name and effect
-                                        String[] commandSplit = ctx.getLastChild().getInput().split(" ");
-                                        String playerName = commandSplit[commandSplit.length - 2];
-                                        String effectName = commandSplit[commandSplit.length - 1];
+		// Add a command for disabling a cosmetic effect for a player
+		ClientSideCommandRegistry.getInstance().addCommand("RemovePlayerCosmetics", () -> {
+			return ActionBridge.newClientSideCommand((c) -> {
+				return changePlayerCosmetics(c, false);
+			}, new StringLiteral(CommandRegistry.JUST_CORE_BASE_COMMAND_PREFIX), new StringLiteral("removeEffect"),
+					new SinglePlayerSelector("player"), new StringInput("effect"));
+		});
+	}
 
-                                        // Get the effect to apply
-                                        CosmeticEffect newEffect = CosmeticEffect.stringNameToEffectObject(effectName);
+	private int changePlayerCosmetics(CommandContext<?> ctx, boolean show) {
+		// Parse out the player name and effect
+		String[] commandSplit = ctx.getLastChild().getInput().split(" ");
+		String playerName = commandSplit[commandSplit.length - 2];
+		String effectName = commandSplit[commandSplit.length - 1];
 
-                                        // Make registry call
-                                        CustomPlayerCosmeticsRegistry.getInstance()
-                                                .addCosmeticEffectToPlayer(new JustPlayer(playerName), newEffect);
+		// Get the effect to handle
+		CosmeticEffect newEffect = CosmeticEffect.stringNameToEffectObject(effectName);
 
-                                        // Notify the user
-                                        ChatUtils.sendSelfChatMessage(String.format("Applying effect %s to user: %s",
-                                                effectName, playerName));
-                                        return 0;
-                                    }))));
-        });
+		// Make registry call
+		if (show) {
+			CustomPlayerCosmeticsRegistry.getInstance().addCosmeticEffectToPlayer(new JustPlayer(playerName),
+					newEffect);
+		} else {
+			CustomPlayerCosmeticsRegistry.getInstance().removeCosmeticEffectToPlayer(new JustPlayer(playerName),
+					newEffect);
+		}
 
-        // Add a command for disabling a cosmetic effect for a player
-        ClientSideCommandRegistry.getInstance().addCommand("RemovePlayerCosmetics", () -> {
-            return ArgumentBuilders.literal(CommandRegistry.JUST_CORE_BASE_COMMAND_PREFIX)
-                    .then(ArgumentBuilders.literal("removeEffect")
-                            .then(ArgumentBuilders.argument("player", EntityArgumentType.player()).then(
-                                    ArgumentBuilders.argument("effect", StringArgumentType.string()).executes(ctx -> {
-
-                                        // Parse out the player name and effect
-                                        String[] commandSplit = ctx.getLastChild().getInput().split(" ");
-                                        String playerName = commandSplit[commandSplit.length - 2];
-                                        String effectName = commandSplit[commandSplit.length - 1];
-
-                                        // Get the effect to remove
-                                        CosmeticEffect newEffect = CosmeticEffect.stringNameToEffectObject(effectName);
-
-                                        // Make registry call
-                                        CustomPlayerCosmeticsRegistry.getInstance()
-                                                .removeCosmeticEffectToPlayer(new JustPlayer(playerName), newEffect);
-
-                                        // Notify the user
-                                        ChatUtils.sendSelfChatMessage(String.format("Removing effect %s from user: %s",
-                                                effectName, playerName));
-                                        return 0;
-                                    }))));
-        });
-    }
+		// Notify the user
+		ChatUtils.sendSelfChatMessage(
+				String.format("%s effect %s for user: %s", (show) ? "Applying" : "Removing", effectName, playerName));
+		return 0;
+	}
 
 }
