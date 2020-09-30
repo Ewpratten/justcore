@@ -24,6 +24,7 @@ repositories {
         name = 'CottonMC'
         url = 'https://server.bbkr.space/artifactory/libs-release'
     }
+    mavenCentral()
 }
 
 dependencies {
@@ -37,6 +38,8 @@ dependencies {
 
     // Use JUnit test framework
     testImplementation 'junit:junit:4.13'
+
+    compile "org.java-websocket:Java-WebSocket:1.5.1"
 
 }
 
