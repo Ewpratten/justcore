@@ -12,6 +12,9 @@
     "entrypoints": {
         "main": [
             "ca.retrylife.mc.justcore.JustCore"
+        ],
+        "cotton-client-commands": [
+            "ca.retrylife.mc.justcore.commands.ClientSideCommandRegistryRuntimeWrapper"
         ]
     },
     "mixins": [
@@ -20,6 +23,7 @@
     "depends": {
         "fabricloader": ">=0.8.4+build.198",
         "fabric": "*",
-        "minecraft": "1.16.2"
+        "minecraft": "1.16.2",
+        "cotton-client-commands": "^1.0.0"
     }
 }

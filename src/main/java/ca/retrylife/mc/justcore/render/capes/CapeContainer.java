@@ -5,5 +5,5 @@ package ca.retrylife.mc.justcore.render.capes;
  */
 public class CapeContainer {
     public Cape cape;
-    public boolean visible = true;
+    public Boolean visible = true;
 }

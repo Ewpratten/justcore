@@ -18,6 +18,10 @@ repositories {
         name = "Half's Repo"
         url = "https://raw.githubusercontent.com/Devan-Kerman/Devan-Repo/master/"
     }
+    maven {
+        name = 'CottonMC'
+        url = 'https://server.bbkr.space/artifactory/libs-release'
+    }
 }
 
 dependencies {
@@ -26,6 +30,8 @@ dependencies {
     modCompile "net.fabricmc:fabric-loader:${project.loader_version}"
 
     modCompile "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+    modImplementation "io.github.cottonmc:cotton-client-commands:1.0.1+1.16-rc1"
 }
 
 processResources {
